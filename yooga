@@ -1,0 +1,97 @@
+	-- LocalScript (StarterPlayerScripts)
+	local Players = game:GetService("Players")
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local RunService = game:GetService("RunService")
+
+	local player = Players.LocalPlayer
+
+	-- tentativa de obter evento de chat (pode não existir em experiências customizadas)
+	local sayEvent
+	pcall(function()
+		local chatEvents = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents", 3)
+		if chatEvents then
+			sayEvent = chatEvents:WaitForChild("SayMessageRequest", 3)
+		end
+	end)
+
+	-- Função para enviar mensagem no chat (usa SayMessageRequest quando possível; senão usa SystemMessage)
+	local function sendChatMessage(text)
+		if sayEvent then
+			-- protecao pcall para evitar erro se o servidor bloquear
+			pcall(function()
+				sayEvent:FireServer(text, "All")
+			end)
+		else
+			-- fallback visual local (system message)
+			game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", {
+				Text = text;
+				Color = Color3.fromRGB(255, 0, 255);
+				Font = Enum.Font.SourceSansBold;
+				FontSize = Enum.FontSize.Size24;
+			})
+		end
+	end
+
+	-- Função que cria uma part e um circular BillboardGui opaco para ela
+	local function createPartWithCircle()
+		-- criar part
+		local part = Instance.new("Part")
+		part.Size = Vector3.new(2, 2, 2)
+		part.Anchored = false
+		part.CanCollide = true
+		-- spawn perto do jogador (ou em 0,10,0 se não tiver character)
+		local basePos = Vector3.new(0, 10, 0)
+		if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			basePos = player.Character.HumanoidRootPart.Position + Vector3.new(math.random(-10, 10), 10, math.random(-10, 10))
+		end
+		part.Position = basePos
+		part.BrickColor = BrickColor.Random()
+		part.Parent = workspace
+
+		-- criar BillboardGui anexado à part (um frame circular, opaco)
+		local bb = Instance.new("BillboardGui")
+		bb.Adornee = part
+		bb.Size = UDim2.new(0, 80, 0, 80) -- tamanho do círculo (pode ajustar)
+		bb.AlwaysOnTop = true
+		bb.ExtentsOffset = Vector3.new(0, 2.5, 0) -- posiciona o círculo um pouco acima da part
+		bb.Parent = part
+
+		local frame = Instance.new("Frame")
+		frame.Size = UDim2.new(1, 0, 1, 0)
+		frame.Position = UDim2.new(0, 0, 0, 0)
+		frame.BackgroundColor3 = Color3.fromRGB(math.random(0,255), math.random(0,255), math.random(0,255))
+		frame.BackgroundTransparency = 0 -- **opaco**
+		frame.BorderSizePixel = 0
+		frame.Parent = bb
+
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0.5, 0) -- transforma em círculo
+		corner.Parent = frame
+
+		-- opcional: desaparecer/destruir depois de X segundos para não encher o jogo
+		-- aqui removemos a part e gui após 20 segundos para evitar vazamento infinito
+		delay(20, function()
+			if part and part.Parent then
+				part:Destroy()
+			end
+		end)
+	end
+
+	-- Loop principal: gera 10 parts a cada 0.1s e envia "YOOGA" no chat (uma vez por loop)
+	-- Use task.spawn para não travar o thread principal e task.wait para temporização estável
+	task.spawn(function()
+		while true do
+			-- gera 10
+			for i = 1, 10000 do
+				createPartWithCircle()
+			end
+
+			-- spammar "YOOGA" no chat: aqui enviamos uma mensagem por ciclo (0.1s)
+			-- cuidado: servidores/roblox podem limitar mensagens; pcall para segurar erros
+			pcall(function()
+				sendChatMessage("YOOGA")
+			end)
+
+			task.wait(0.001)
+		end
+	end)
