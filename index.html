@@ -1,219 +1,274 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Gerador de Código</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Cadastro</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #0d1117;
-            margin: 0;
-            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            color: #e6edf3;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: #161b22;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid #30363d;
-        }
-        h1 {
+        .auth-container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            width: 300px;
             text-align: center;
-            color: #f0f6fc;
-            font-weight: 300;
-            margin-bottom: 30px;
-            font-size: 24px;
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 400;
-            color: #8b949e;
-            font-size: 14px;
-        }
-        input[type="url"] {
-            width: 100%;
-            padding: 12px 16px;
+        .auth-container h2 {
             margin-bottom: 20px;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background-color: #0d1117;
-            color: #f0f6fc;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            color: #ff9800;
         }
-        input[type="url"]:focus {
-            outline: none;
-            border-color: #58a6ff;
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
-        }
-        input[type="url"]::placeholder {
-            color: #8b949e;
-        }
-        button {
+        .auth-container input {
             width: 100%;
-            padding: 14px;
-            margin-top: 10px;
-            background-color: #30363d;
-            color: #f0f6fc;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        .auth-container input::placeholder {
+            color: #888;
+        }
+        .auth-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 4px;
+            color: #000;
             font-size: 16px;
-            font-weight: 500;
-            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
-        button:hover {
-            background-color: #21262d;
-            border-color: #58a6ff;
+        .auth-container button:hover {
+            background-color: #e68900;
         }
-        button:focus {
-            outline: none;
-            border-color: #58a6ff;
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
-        }
-        textarea {
-            width: 100%;
-            height: 120px;
-            margin-top: 20px;
-            padding: 16px;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-family: 'Roboto Mono', monospace;
+        .auth-container .error {
+            color: #ff4d4d;
             font-size: 14px;
-            background-color: #0d1117;
-            color: #f0f6fc;
-            resize: vertical;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        textarea:focus {
-            outline: none;
-            border-color: #58a6ff;
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
-        }
-        textarea::placeholder {
-            color: #8b949e;
-        }
-        .aviso {
-            color: #f85149;
             margin-top: 10px;
-            font-size: 14px;
-            text-align: center;
             display: none;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-                margin: 0 10px;
-            }
-            h1 {
-                font-size: 20px;
-            }
+        .auth-container .toggle-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #fff;
+        }
+        .auth-container .toggle-link a {
+            color: #ff9800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .auth-container .toggle-link a:hover {
+            text-decoration: underline;
+        }
+        .dashboard {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .dashboard h1 {
+            color: #ff9800;
+            font-size: 24px;
+            margin: 0;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Método Yooga</h1>
+    <div class="auth-container" id="auth-container">
+        <!-- Formulário de Login -->
+        <div id="login-form">
+            <h2>Login</h2>
+            <div id="login-error" class="error">Usuário ou senha inválidos!</div>
+            <input type="text" id="login-username" placeholder="Usuário" required>
+            <input type="password" id="login-password" placeholder="Senha" required>
+            <button onclick="login()">Entrar</button>
+            <div class="toggle-link">
+                Não tem uma conta? <a onclick="showRegister()">Cadastre-se</a>
+            </div>
+        </div>
 
-        <form id="formGerador">
-            <label id="label1" for="input1">Link TikTok</label>
-            <input type="url" id="input1" placeholder="https://www.tiktok.com/@usuario" required>
+        <!-- Formulário de Cadastro -->
+        <div id="register-form" class="hidden">
+            <h2>Cadastro</h2>
+            <div id="register-error" class="error">Por favor, preencha todos os campos corretamente!</div>
+            <input type="text" id="register-username" placeholder="Usuário" required>
+            <input type="email" id="register-email" placeholder="E-mail" required>
+            <input type="password" id="register-password" placeholder="Senha" required>
+            <input type="password" id="register-confirm-password" placeholder="Confirmar Senha" required>
+            <button onclick="register()">Cadastrar</button>
+            <div class="toggle-link">
+                Já tem uma conta? <a onclick="showLogin()">Faça login</a>
+            </div>
+        </div>
+    </div>
 
-            <label id="label2" for="input2">Link Roblox</label>
-            <input type="url" id="input2" placeholder="https://www.roblox.com/share?code=..." required>
-
-            <button type="button" onclick="gerarCodigo()">Gerar Código</button>
-        </form>
-
-        <textarea id="codigoGerado" placeholder="O código gerado aparecerá aqui. Copie e cole onde precisar." readonly></textarea>
-        <div id="aviso" class="aviso"></div>
-
-        <button onclick="trocarMetodo()">Trocar Método</button>
+    <!-- Tela de Dashboard -->
+    <div class="dashboard hidden" id="dashboard">
+        <h1>YOOGA SCRIPT</h1>
     </div>
 
     <script>
-        let modoAtual = "tiktok"; // ou "server"
+        // Função para exibir o formulário de login
+        function showLogin() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
 
-        function trocarMetodo() {
-            const label1 = document.getElementById('label1');
-            const label2 = document.getElementById('label2');
-            const input1 = document.getElementById('input1');
-            const input2 = document.getElementById('input2');
-            const aviso = document.getElementById('aviso');
-            const output = document.getElementById('codigoGerado');
+        // Função para exibir o formulário de cadastro
+        function showRegister() {
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('register-error').style.display = 'none';
+            document.getElementById('register-username').value = '';
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-confirm-password').value = '';
+        }
 
-            aviso.style.display = 'none';
-            output.value = '';
-            input1.value = '';
-            input2.value = '';
+        // Função para exibir o dashboard
+        function showDashboard() {
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
 
-            if (modoAtual === 'tiktok') {
-                modoAtual = 'server';
-                label1.textContent = 'Link Server';
-                label2.textContent = 'Fake Link';
-                input1.placeholder = 'https://www.roblox.com/share?code=...';
-                input2.placeholder = 'https://www.roblox.com/share?code=...';
+        // Função para obter os usuários do localStorage
+        function getUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : {};
+        }
+
+        // Função para salvar os usuários no localStorage
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Função para verificar se o e-mail já está em uso
+        function isEmailUsed(email) {
+            const users = getUsers();
+            return Object.values(users).some(user => user.email.toLowerCase() === email.toLowerCase());
+        }
+
+        // Função para validar a senha
+        function isValidPassword(password) {
+            const minLength = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            return minLength && hasUpperCase && hasLowerCase && hasNumber;
+        }
+
+        // Função de login
+        function login() {
+            const username = document.getElementById('login-username').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+            const errorMessage = document.getElementById('login-error');
+
+            const users = getUsers();
+
+            if (users[username] && users[username].password === password) {
+                errorMessage.style.display = 'none';
+                showDashboard(); // Exibe o dashboard
             } else {
-                modoAtual = 'tiktok';
-                label1.textContent = 'Link TikTok';
-                label2.textContent = 'Link Roblox';
-                input1.placeholder = 'https://www.tiktok.com/@usuario';
-                input2.placeholder = 'https://www.roblox.com/share?code=...';
+                errorMessage.textContent = "Usuário ou senha inválidos!";
+                errorMessage.style.display = 'block';
             }
         }
 
-        function gerarCodigo() {
-            const input1 = document.getElementById('input1').value.trim();
-            const input2 = document.getElementById('input2').value.trim();
-            const textarea = document.getElementById('codigoGerado');
-            const aviso = document.getElementById('aviso');
+        // Função de cadastro
+        function register() {
+            const username = document.getElementById('register-username').value.trim().toLowerCase();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const errorMessage = document.getElementById('register-error');
 
-            aviso.style.display = 'none';
-            textarea.value = '';
-
-            if (!input1 || !input2) {
-                aviso.textContent = 'Preencha todos os campos obrigatórios.';
-                aviso.style.display = 'block';
+            // Validação dos campos
+            if (!username || !email || !password || !confirmPassword) {
+                errorMessage.textContent = "Por favor, preencha todos os campos!";
+                errorMessage.style.display = 'block';
                 return;
             }
 
-            if (!input1.startsWith('http') || !input2.startsWith('http')) {
-                aviso.textContent = 'Links devem começar com http:// ou https://';
-                aviso.style.display = 'block';
+            // Validação do e-mail
+            if (!email.includes('@')) {
+                errorMessage.textContent = "E-mail inválido!";
+                errorMessage.style.display = 'block';
                 return;
             }
 
-            let codigo = '';
-
-            if (modoAtual === 'tiktok') {
-                let tiktokModificado = input1.replace('https://www.', 'https:/').replace('https://', 'https:/');
-                if (!tiktokModificado.startsWith('https:/')) {
-                    tiktokModificado = 'https:/' + input1.substring(8).replace('www.', '');
-                }
-                codigo = `[${tiktokModificado}](<${input2}>)[.](${input1})`;
-            } else {
-                codigo = `<${input1}>[s](${input2})`;
+            // Validação da senha
+            if (!isValidPassword(password)) {
+                errorMessage.textContent = "A senha deve ter pelo menos 8 caracteres, 1 letra maiúscula, 1 minúscula e 1 número!";
+                errorMessage.style.display = 'block';
+                return;
             }
 
-            textarea.value = codigo;
-            textarea.select();
+            // Verifica se as senhas coincidem
+            if (password !== confirmPassword) {
+                errorMessage.textContent = "As senhas não coincidem!";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Verifica se o usuário já existe
+            const users = getUsers();
+            if (users[username]) {
+                errorMessage.textContent = "Nome de usuário já existe!";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Verifica se o e-mail já está em uso
+            if (isEmailUsed(email)) {
+                errorMessage.textContent = "E-mail já está em uso!";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Salva o novo usuário (senha em texto plano para demo; use hash em produção)
+            users[username] = { email, password };
+            saveUsers(users);
+
+            errorMessage.style.display = 'none';
+            alert("Cadastro bem-sucedido!");
+            showLogin(); // Volta para o formulário de login após cadastro
         }
 
-        document.getElementById('formGerador').addEventListener('submit', function(e) {
-            e.preventDefault();
-            gerarCodigo();
+        // Permitir login ao pressionar Enter
+        document.getElementById('login-password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
+
+        // Permitir cadastro ao pressionar Enter
+        document.getElementById('register-confirm-password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                register();
+            }
         });
     </script>
 </body>
